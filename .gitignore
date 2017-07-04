@@ -41,6 +41,8 @@ sdist/
 var/
 wheels/
 bin/
+tmp/
+result/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -117,4 +119,7 @@ ENV/
 # mkdocs documentation
 /site
 
+#my conf
+.auto
+results/
 # End of https://www.gitignore.io/api/linux,python
