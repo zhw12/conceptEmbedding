@@ -22,10 +22,10 @@ $ sudo apt-get install python
 $ sudo pip install -r requirements.txt
 ```
 
-##Build
+## Build
 Build SegPhrase by Makefile in the terminal.
 ```
-$cd Segphrase
+$ cd SegPhrase
 $ make
 ```
 
@@ -36,7 +36,7 @@ $ ./segmentating_embedding.sh
 ```
 The concept extraction and segmentation are in `segPhrase.sh`, which calls `domain_keyphrase_extraction.sh` for concept extraction.
 
- Segmented text processing and phrase to token convertion is in `convertSegphraseToPhraseAsWord.py`.
+ Segmented text processing and phrase-to-token convertion is in `convertSegphraseToPhraseAsWord.py`.
 
 Concept embedding learning is in `learnEmbedding.py`.
 
@@ -48,19 +48,19 @@ The running parameters are located in `conf.d` folder, including `segphrase.conf
 
 `learning_embedding.conf` contains the parameters for learning concept embedding.
 
-###segphrase.conf
+### segphrase.conf
 ```
-DATASET=signal_processing
+DATASET=dataset
 ```
-DATASET refers to the name you assign to the dataset, this is related to the location for temp files.
+DATASET refers to the name you assign to the dataset, which related to the location for temp files.
 ```
-RAW_TEXT=data/input.txt
+RAW_TEXT=SegPhrase/data/input.txt
 ```
 RAW_TEXT is the input of SegPhrase, where each line is a single document. 
 
 ```
 AUTO_LABEL=1
-DATA_LABEL=data/wiki.label.auto
+DATA_LABEL=SegPhrase/data/wiki.label.auto
 ```
 
 When AUTO_LABEL is set to 1, SegPhrase will automatically generate labels and
@@ -70,7 +70,7 @@ save it to DATA_LABEL. Otherwise, it will load labels from DATA_LABEL.
 WORDNET_NOUN=1
 ```
 
-when WORDNET_NOUN is set to 1, SegPhrase will resort to wordnet synsets to keep
+When WORDNET_NOUN is set to 1, SegPhrase will resort to wordnet synsets to keep
 only noun candidates as the last step of training. This requires you to install
 nltk in python.
 
@@ -122,14 +122,14 @@ RETAIN_PHRASES_RATIO=0.5
 
 RETAIN_PHRASES_RATIO is the ratio of phrases kept when doing the segmentation.
 
-###learning_embedding.conf
+### learning_embedding.conf
 
 ```
 file=results/segmented_text.txt_phraseAsWord.txt
 ```
 
 file is the input file of `learning_embedding.py`, where each line is a single document.
-By default, it points to segmented result where each phrase is converted into one token.
+By default, it points to the segmented result where each phrase is converted into one token.
 
 ```
 result_dir=results
@@ -166,14 +166,14 @@ workers is num of threads used to learn the embedding.
 ## Input Format
 The input should be a text file with one document per line. 
 
-For files with multiple files, we provide a python file `concatFiles.py` for concatenating them to one file.
+For multiple files, we provide a python file `concatFiles.py` for concatenating them into one file.
 
 The usage of concatFiles.py is `python concatFiles.py input_dir output_file`.
 
 Since Segphrase parser uses square brackets to identify phrases in the segmented text, these brackets should be cleaned from input files to avoid misidentification.
 
 ## Output Format
-There output  consists of
+The output  consists of
 * ```keyphrases.csv```
 The extracted keyphrases by Segphrase.
 * ```segmented_text.txt_phraseAsWord```
