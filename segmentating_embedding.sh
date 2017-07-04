@@ -9,6 +9,6 @@ mkdir -p $RESULT_DIR
 python convertSegphraseToPhraseAsWord.py $RESULT_DIR/segmented_text.txt
 
 echo "Learning embedding of concepts"
-python learnEmbedding.py $RESULT_DIR/segmented_text.txt_phraseAsWord.txt
+python learnEmbedding.py
 
 echo "Done"
