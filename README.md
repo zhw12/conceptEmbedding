@@ -54,7 +54,7 @@ DATASET=dataset
 ```
 DATASET refers to the name you assign to the dataset, which related to the location for temp files.
 ```
-RAW_TEXT=SegPhrase/data/input.txt
+RAW_TEXT=data/input.txt
 ```
 RAW_TEXT is the input of SegPhrase, where each line is a single document. 
 
