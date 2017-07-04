@@ -40,6 +40,8 @@ The concept extraction and segmentation are in `segPhrase.sh`, which calls `doma
 
 Concept embedding learning is in `learnEmbedding.py`.
 
+You could use `cleanTmp.sh` to delete temp files.
+
 
 ## Parameters
 The running parameters are located in `conf.d` folder, including `segphrase.conf` and `learning_embedding.conf`. 
