@@ -172,7 +172,7 @@ For multiple files, we provide a python file `concatFiles.py` for concatenating 
 
 The usage of concatFiles.py is `python concatFiles.py input_dir output_file`.
 
-Since Segphrase parser uses square brackets to identify phrases in the segmented text, these brackets should be cleaned from input files to avoid misidentification.
+Since Segphrase parser uses square brackets to identify phrases in the segmented text, these brackets should be cleaned from input files to avoid misidentification. Besides, Segphrase will fail to automatically generate label if the dataset is too small.
 
 ## Output Format
 The output  consists of
