@@ -6,39 +6,52 @@ import numpy as np
 import collections
 from gensim.models import word2vec
 import gensim
-import json, codecs
+import json
+import ConfigParser
 
-# file = 'data/segmented_text.txt_phraseAsWord'
-file = 'data/signal_processing/segmented_text.txt_phraseAsWord.txt'
+cf = ConfigParser.ConfigParser()    
+cf.read('conf.d/learning_embedding.conf')
+
+file = cf.get('embedding', 'file')
+result_dir = cf.get('embedding', 'result_dir')
+embed_size = cf.getint('embedding', 'embed_size')
+workers = cf.getint('embedding', 'workers')
+max_vocab_size = cf.get('embedding', 'max_vocab_size')
+sg = cf.getint('embedding', 'sg')
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
-import sys
-if len(sys.argv) > 1:
-  file = sys.argv[1]
   
 def trim_rule(word, count, min_count):
-  return gensim.utils.RULE_KEEP if '_' in word else gensim.utils.RULE_DEFAULT 
+    return gensim.utils.RULE_KEEP if '_' in word else gensim.utils.RULE_DEFAULT 
 
 def displayString(w):
- return re.sub(r'</?phrase>','',w)
+    return re.sub(r'</?phrase>','',w)
 
 concept_embeddings = {}
 
-# sg : defines the training algorithm. (sg = 0 : CBOW, sg = 1 : skip-gram).
-# size : dimensionality of the feature vectors.
+# sg is the training algorithm of learning embedding, where sg = 0 corresponds to CBOW, sg = 1 corresponds to skip-gram. 
+# embed_size is the dimensionality of the learned embedding vectors.
+# max_vocab_size is maximum num of vocabulary used during vocabulary building. It should be None or a number, e.g. 60000, where None means using all vocabulary.
+# workers is num of threads used to learn the embedding.
 
-for size in [50,128,200]:
-  for sg in [0,1]:
-    for max_vocab_size in [60000,None]:
-      model = word2vec.Word2Vec(word2vec.LineSentence(file), size=size,  workers=120, max_vocab_size=max_vocab_size, 
-        trim_rule = trim_rule, sg=sg)
+if max_vocab_size == 'None':
+    max_vocab_size = None
+else:
+    max_vocab_size = int(max_vocab_size)
 
-      max_vocab_size = -1 if max_vocab_size == None else max_vocab_size
-      
-      concept_embeddings = {w:model.wv[w].tolist() for w in model.wv.index2word if '_' in w}
+if not os.path.exists(result_dir):
+    os.makedirs(result_dir)
 
-      model.save(file + '.model_dimension%d_sg%d_max_vocab_size%d' % (size, sg, max_vocab_size))
-      with open(file+'.concept_embedding_dimension%d_sg%d_max_vocab_size%d.json' % (size, sg, max_vocab_size), 'w') as f_out:
-        json.dump(concept_embeddings, f_out)
+model = word2vec.Word2Vec(word2vec.LineSentence(file), size=embed_size,  workers=workers, max_vocab_size=max_vocab_size, 
+  trim_rule = trim_rule, sg=sg)
+
+max_vocab_size = -1 if max_vocab_size == None else max_vocab_size
+
+concept_embeddings = {w:model.wv[w].tolist() for w in model.wv.index2word if '_' in w}
+
+
+# model.save(result_dir + '/model_dimension%d_sg%d_max_vocab_size%d.model' % (embed_size, sg, max_vocab_size))
+with open(result_dir+'/concept_embedding_dimension%d_sg%d_max_vocab_size%d.json' % (embed_size, sg, max_vocab_size), 'w') as f_out:
+    json.dump(concept_embeddings, f_out)
 

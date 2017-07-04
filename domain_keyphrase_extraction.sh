@@ -1,25 +1,23 @@
 #!/bin/bash
 
-export OMP_NUM_THREADS=${OMP_NUM_THREADS:- 4}
-export MIN_PHRASE_SUPPORT=${MIN_PHRASE_SUPPORT:- 10}
+export PYTHON=python
+export PYPY=python
 
-AUTO_LABEL=1
-WORDNET_NOUN=1
-DATA_LABEL=data/wiki.label.auto
-KNOWLEDGE_BASE=data/wiki_labels_quality.txt
-KNOWLEDGE_BASE_LARGE=data/wiki_labels_all.txt
+#for running alone
+DATASET=${DATASET:- "dataset"}
+source conf.d/segphrase.conf
 
-STOPWORD_LIST=../src/tools/stopwords.txt
-SUPPORT_THRESHOLD=$MIN_PHRASE_SUPPORT
-DISCARD_RATIO=0.00
-MAX_ITERATION=5
-
-NEED_UNIGRAM=0
-ALPHA=0.85
+#convert path to absolute path
+RAW_TEXT=`readlink -f $RAW_TEXT`
+DATA_LABEL=`readlink -f $DATA_LABEL`
+KNOWLEDGE_BASE=`readlink -f $KNOWLEDGE_BASE`
+KNOWLEDGE_BASE_LARGE=`readlink -f $KNOWLEDGE_BASE_LARGE`
+STOPWORD_LIST=`readlink -f $STOPWORD_LIST`
 
 echo tmp/$DATASET
 cd SegPhrase
-make
+# make
+
 # clearance
 rm -rf tmp/$DATASET
 rm -rf results/$DATASET
@@ -105,4 +103,3 @@ then
 fi
 
 cd ..
-

@@ -1296,7 +1296,6 @@ techniques
 task
 experiment
 experiments
-approach
 traditional
 important
 problem
