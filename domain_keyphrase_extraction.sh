@@ -8,11 +8,11 @@ DATASET=${DATASET:- "dataset"}
 source conf.d/segphrase.conf
 
 #convert path to absolute path
-RAW_TEXT=`readlink -f $RAW_TEXT`
-DATA_LABEL=`readlink -f $DATA_LABEL`
-KNOWLEDGE_BASE=`readlink -f $KNOWLEDGE_BASE`
-KNOWLEDGE_BASE_LARGE=`readlink -f $KNOWLEDGE_BASE_LARGE`
-STOPWORD_LIST=`readlink -f $STOPWORD_LIST`
+RAW_TEXT=`python -c "import os; print os.path.abspath('$RAW_TEXT')"`
+DATA_LABEL=`python -c "import os; print os.path.abspath('$DATA_LABEL')"`
+KNOWLEDGE_BASE=`python -c "import os; print os.path.abspath('$KNOWLEDGE_BASE')"`
+KNOWLEDGE_BASE_LARGE=`python -c "import os; print os.path.abspath('$KNOWLEDGE_BASE_LARGE')"`
+STOPWORD_LIST=`python -c "import os; print os.path.abspath('$STOPWORD_LIST')"`
 
 echo tmp/$DATASET
 cd SegPhrase

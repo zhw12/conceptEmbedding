@@ -8,11 +8,28 @@ from gensim.models import word2vec
 import gensim
 import json
 import ConfigParser
+import StringIO
+
+# use file path in segphrase.conf
+segphrase_config = StringIO.StringIO()
+segphrase_config.write('[segphrase]\n')
+segphrase_config.write(open('conf.d/segphrase.conf').read())
+segphrase_config.seek(0, os.SEEK_SET)
+
+cp = ConfigParser.ConfigParser()
+cp.readfp(segphrase_config)
+default_file = cp.get('segphrase', 'RESULT_DIR') + '/segmented_text.txt_phraseAsWord.txt'
 
 cf = ConfigParser.ConfigParser()    
 cf.read('conf.d/learning_embedding.conf')
 
-file = cf.get('embedding', 'file')
+try:
+  # file parameter defined in learning_embedding.conf
+  file = cf.get('embedding', 'file')
+except:
+  # default saved results
+  file  = default_file
+
 result_dir = cf.get('embedding', 'result_dir')
 embed_size = cf.getint('embedding', 'embed_size')
 workers = cf.getint('embedding', 'workers')
@@ -23,7 +40,7 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 
   
 def trim_rule(word, count, min_count):
-    return gensim.utils.RULE_KEEP if '_' in word else gensim.utils.RULE_DEFAULT 
+    return gensim.utils.RULE_KEEP if '_' in word else gensim.utils.RULE_DEFAULT
 
 def displayString(w):
     return re.sub(r'</?phrase>','',w)
@@ -51,7 +68,7 @@ max_vocab_size = -1 if max_vocab_size == None else max_vocab_size
 concept_embeddings = {w:model.wv[w].tolist() for w in model.wv.index2word if '_' in w}
 
 
-# model.save(result_dir + '/model_dimension%d_sg%d_max_vocab_size%d.model' % (embed_size, sg, max_vocab_size))
+model.save(result_dir + '/model_dimension%d_sg%d_max_vocab_size%d.model' % (embed_size, sg, max_vocab_size))
 with open(result_dir+'/concept_embedding_dimension%d_sg%d_max_vocab_size%d.json' % (embed_size, sg, max_vocab_size), 'w') as f_out:
     json.dump(concept_embeddings, f_out)
 

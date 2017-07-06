@@ -10,6 +10,7 @@ mkdir -p tmp/$DATASET
 echo -e "${Green}Training SegPhrase${NC}"
 ./domain_keyphrase_extraction.sh
 
+# Segphrase results saved in SegPhrase/results/$DATASET
 cp SegPhrase/results/$DATASET/salient.csv tmp/$DATASET/keyphrases.csv
 cp SegPhrase/results/$DATASET/segmentation.model tmp/$DATASET/segmentation.model
 
