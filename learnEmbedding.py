@@ -18,7 +18,7 @@ segphrase_config.seek(0, os.SEEK_SET)
 
 cp = ConfigParser.ConfigParser()
 cp.readfp(segphrase_config)
-default_file = cp.get('segphrase', 'RESULT_DIR') + '/segmented_text.txt_phraseAsWord.txt'
+default_file = os.path.abspath(cp.get('segphrase', 'RESULT_DIR')) + '/segmented_text.txt_phraseAsWord.txt'
 
 cf = ConfigParser.ConfigParser()    
 cf.read('conf.d/learning_embedding.conf')
